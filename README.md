@@ -6,11 +6,10 @@
 This action will read a specified source file and attempts to extract
 the current version with a customizable regular expression pattern.
 After extracting the current version, AutoTagBot will verify that a Git
-tag/release with a specified pattern exists for the current version.
+tag with a specified pattern exists for the current version.
 
-If no tag/release was found, AutoTagBot automatically creates a new one
-and generates a changelog by listing all commits since the previous
-tags.
+If no tag was found, AutoTagBot automatically creates a new one and
+generates a changelog by listing all commits since the previous tags.
 
 ## Usage
 
@@ -25,11 +24,11 @@ name: AutoTagBot
 on:
   push:
     branches:
-    - master
+        - master
     paths:
-    # This would not be necessary, as AutoTagBot skips already tagged releases
-    # It is however desirable to not trigger this workflow if not required
-    - package.json
+        # This would not be necessary, as AutoTagBot skips already tagged versions
+        # It is however desirable to not trigger this workflow if not required
+        - package.json
 
 jobs:
   AutoTagBot:
@@ -38,7 +37,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Release new versions using AutoTagBot
+      - name: Tag new versions using AutoTagBot
         uses: snapserv/action-autotagbot@v1.0.0
         with:
             api_token: '${{ secrets.GITHUB_TOKEN }}'
