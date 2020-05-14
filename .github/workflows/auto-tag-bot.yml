@@ -21,3 +21,4 @@ jobs:
           api_token: '${{ secrets.GITHUB_TOKEN }}'
           source_file: 'package.json'
           version_pattern: '"version"\s*:\s*"(?<version>[0-9.]+)"'
+          version_format: 'v{version}'
