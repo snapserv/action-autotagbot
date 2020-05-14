@@ -14,7 +14,7 @@ generates a changelog by listing all commits since the previous tags.
 ## Usage
 
 The following snippet is an example GitHub workflow (e.g.
-`.github/workflows/AutoTagBot.yml`), which will automatically create
+`.github/workflows/auto-tag-bot.yml`), which will automatically create
 tags whenever a `push` to `master` happens and the version in
 `package.json` has been changed:
 
@@ -24,25 +24,26 @@ name: AutoTagBot
 on:
   push:
     branches:
-        - master
+      - master
     paths:
-        # This would not be necessary, as AutoTagBot skips already tagged versions
-        # It is however desirable to not trigger this workflow if not required
-        - package.json
+      # This would not be necessary, as AutoTagBot skips already tagged versions
+      # It is however desirable to not trigger this workflow if not required
+      - package.json
 
 jobs:
-  AutoTagBot:
+  auto-tag-bot:
+    name: AutoTagBot
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Tag new versions using AutoTagBot
-        uses: snapserv/action-autotagbot@v1.0.0
+      - name: Release new versions using TagBot
+        uses: snapserv/action-tagbot@master
         with:
-            api_token: '${{ secrets.GITHUB_TOKEN }}'
-            source_file: 'package.json'
-            version_pattern: '"version"\s*:\s*"(?<version>[0-9.]+)"'
+          api_token: '${{ secrets.GITHUB_TOKEN }}'
+          source_file: 'package.json'
+          version_pattern: '"version"\s*:\s*"(?<version>[0-9.]+)"'
 ```
 
 Please make sure to use `actions/checkout` before this action, as
