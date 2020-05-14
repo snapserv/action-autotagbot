@@ -1,4 +1,4 @@
-name: 'GitHub Tag Bot'
+name: 'AutoTagBot'
 description: 'Automatically tag commits by extracting the current version from a given source file.'
 author: 'Pascal Mathis'
 inputs:
