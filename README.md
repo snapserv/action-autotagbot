@@ -11,6 +11,10 @@ tag with a specified pattern exists for the current version.
 If no tag was found, AutoTagBot automatically creates a new one and
 generates a changelog by listing all commits since the previous tags.
 
+If your version is either `0`, `0.0` or `0.0.0`, AutoTagBot will abort
+the execution, as it is normally undesired to release a tag for a
+version which only contains zeros.
+
 ## Usage
 
 The following snippet is an example GitHub workflow (e.g.

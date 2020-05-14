@@ -93,6 +93,9 @@ async function run() {
     core.setOutput('version', version);
     core.debug(`Extracted version from source file: ${version}`);
 
+    if (version === '0' || version === '0.0' || version === '0.0.0')
+      return core.info(`Aborting execution as version [${version}] can not be all zeros`);
+
     const tagPattern = `^${tagFormat}$`
       .replace('{version}', version)
       .replace('{revision}', '(?<revision>[0-9]+)')
@@ -150,7 +153,7 @@ async function run() {
       core.setOutput('tag_uri', tagRef.data.url);
     }
 
-    core.info(`Created new tag [${tagName}] for commit [${context.sha}]`)
+    core.info(`Created new tag [${tagName}] for commit [${context.sha}]`);
   } catch (e) {
     return core.setFailed(e);
   }
