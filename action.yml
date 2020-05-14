@@ -1,0 +1,34 @@
+name: 'GitHub Tag Bot'
+description: 'Automatically tag commits by extracting the current version from a given source file.'
+author: 'Pascal Mathis'
+inputs:
+  api_token:
+    description: 'This token is being used for authenticating against the GitHub API'
+    required: true
+  source_file:
+    description: 'This source file will be read for extracting the current version.'
+    required: true
+  version_pattern:
+    description: 'This regex pattern is being used for extracting the version from the source file.'
+    required: true
+  tag_format:
+    description: 'The desired tag format, can be used for adding a prefix and/or suffix.'
+    default: '{version}'
+    required: false
+outputs:
+  version:
+    description: 'The extracted version, as specified in the source file.'
+  tag_name:
+    description: 'The name of the new tag. Empty if no tag has been created.'
+  tag_revision:
+    description: 'The revision of the new tag. Empty if no tag has been created.'
+  tag_sha:
+    description: 'The SHA hash of the new tag. Empty if no tag has been created.'
+  tag_uri:
+    description: 'The URI/URL of the new tag reference. Empty if no tag has been created.'
+runs:
+  using: 'node12'
+  main: 'main.js'
+branding:
+  icon: 'tag'
+  color: 'blue'
