@@ -69,7 +69,7 @@ async function getTagMessage(git, context, from, to) {
 }
 
 /**
- * Main logic of TagBot, called whenever this action is being executed
+ * Main logic, called whenever this action is being executed
  * @returns {Promise<void>}
  */
 async function run() {
@@ -149,6 +149,8 @@ async function run() {
       core.setOutput('tag_sha', tag.data.sha);
       core.setOutput('tag_uri', tagRef.data.url);
     }
+
+    core.info(`Created new tag [${tagName}] for commit [${context.sha}]`)
   } catch (e) {
     return core.setFailed(e);
   }
