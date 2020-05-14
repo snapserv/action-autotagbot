@@ -3,6 +3,7 @@ const {GitHub, context} = require('@actions/github');
 const fs = require('fs');
 
 /**
+ * Retrieves the latest 100 repository tags from GitHub for the given context.
  * @param {GitHub} git
  * @param {Context} context
  * @returns {Promise<Array<ReposListTagsResponseItem>>}
@@ -17,7 +18,7 @@ async function getRepoTags(git, context) {
 }
 
 /**
- *
+ * Searches for a tag matching a specific pattern, returning null if not found.
  * @param {Array<ReposListTagsResponseItem>} tags
  * @param {RegExp} tagRegExp
  * @returns {Promise<{name: string, sha: string, match: RegExpExecArray}>}
@@ -37,7 +38,7 @@ async function searchMatchingTag(tags, tagRegExp) {
 }
 
 /**
- *
+ * Generates a changelog between two given points, to be used as the tag message
  * @param {GitHub} git
  * @param {Context} context
  * @param {string} from
@@ -67,6 +68,10 @@ async function getTagMessage(git, context, from, to) {
   }
 }
 
+/**
+ * Main logic of TagBot, called whenever this action is being executed
+ * @returns {Promise<void>}
+ */
 async function run() {
   try {
     const apiToken = core.getInput('api_token');
