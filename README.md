@@ -1,7 +1,7 @@
 # AutoTagBot :label:
 
-[![Latest Release](https://img.shields.io/github/v/release/snapserv/action-AutoTagBot)](https://github.com/snapserv/action-AutoTagBot/releases)
-[![License](https://img.shields.io/github/license/snapserv/action-AutoTagBot)](https://github.com/snapserv/action-AutoTagBot/blob/master/LICENSE)
+[![Latest Release](https://img.shields.io/github/v/release/snapserv/action-autotagbot)](https://github.com/snapserv/action-autotagbot/releases)
+[![License](https://img.shields.io/github/license/snapserv/action-autotagbot)](https://github.com/snapserv/action-autotagbot/blob/master/LICENSE)
 
 This action will read a specified source file and attempts to extract
 the current version with a customizable regular expression pattern.
@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Release new versions using TagBot
-        uses: snapserv/action-tagbot@master
+        uses: snapserv/action-autotagbot@master
         with:
           api_token: '${{ secrets.GITHUB_TOKEN }}'
           source_file: 'package.json'
@@ -74,7 +74,7 @@ Putting all these parameters together, the final action configuration in
 your workflow might look like this:
 
 ```yaml
-- uses: snapserv/action-AutoTagBot@v1.0.0
+- uses: snapserv/action-autotagbot@master
   with:
     api_token: '${{ secrets.GITHUB_TOKEN }}'
     source_file: 'package.json'
