@@ -54,7 +54,7 @@ async function getTagMessage(git, context, from, to) {
     if (!changelog.data.commits || changelog.data.commits.length < 1)
       return 'Initial tag';
 
-    let message = '\n';
+    let message = '';
     for (let commit of changelog.data.commits) {
       if (commit) {
         message += `\n* ${commit.commit.message}`;
@@ -134,7 +134,7 @@ async function run() {
     const tag = await git.git.createTag({
       ...context.repo,
       tag: tagName,
-      message: tagMessage,
+      message: `${tagName}\n\n${tagMessage}`,
       object: context.sha,
       type: 'commit',
     });
