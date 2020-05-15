@@ -76,14 +76,15 @@ async function run() {
   try {
     const apiToken = core.getInput('api_token');
     const sourceFile = core.getInput('source_file');
-    const versionPattern = core.getInput('version_pattern');
     const tagFormat = core.getInput('tag_format');
+    const versionPattern = core.getInput('version_pattern');
+    const versionRegExp = new RegExp(versionPattern, 'gm');
 
     if (!fs.existsSync(sourceFile))
       return core.setFailed(`Could not find source file: ${sourceFile}`);
 
     const contents = fs.readFileSync(sourceFile);
-    const matches = String(contents).match(versionPattern);
+    const matches = versionRegExp.exec(String(contents));
     if (!matches)
       return core.setFailed(`Could not find version pattern in source file: ${versionPattern}`);
     if (!matches.groups || !matches.groups.version)
