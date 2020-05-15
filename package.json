@@ -1,6 +1,6 @@
 {
   "name": "autotagbot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Automatically tag commits by extracting the current version from a given source file.",
   "main": "main.js",
   "scripts": {
