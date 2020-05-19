@@ -9,13 +9,12 @@ on:
 
 jobs:
   auto-tag-bot:
-    name: AutoTagBot
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Release new versions using TagBot
+      - name: Release new versions using AutoTagBot
         uses: snapserv/action-autotagbot@master
         with:
           api_token: '${{ secrets.GITHUB_TOKEN }}'
