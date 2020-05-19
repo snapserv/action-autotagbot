@@ -112,7 +112,9 @@ async function run() {
     if (matchingTag && matchingTag.sha === context.sha)
       return core.info(`Aborting execution as tag [${matchingTag.name}] points to current commit [${matchingTag.sha}]`);
 
-    const tagRevision = matchingTag ? parseInt(matchingTag.match.groups.revision) + 1 : 1;
+    const tagRevision = matchingTag && matchingTag.match && matchingTag.match.groups
+      ? parseInt(matchingTag.match.groups.revision) + 1
+      : 1;
     const tagName = tagFormat
       .replace('{version}', version)
       .replace('{revision}', tagRevision.toString());
