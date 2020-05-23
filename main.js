@@ -159,7 +159,7 @@ async function run() {
     body: `${tagMessage}`,
     tag_name: tagName,
     draft: false,
-    prerelease: parsedVersion && (parsedVersion.major === 0 || parsedVersion.prerelease.length),
+    prerelease: parsedVersion && (parsedVersion.major === 0 || parsedVersion.prerelease.length > 0),
   });
   core.info(`Created new release [${release.data.url}]`);
 
