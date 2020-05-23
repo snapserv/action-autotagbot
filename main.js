@@ -1,4 +1,4 @@
-const isPrerelease = require('semver/functions/prerelease');
+const semver = require('semver');
 const core = require('@actions/core');
 const {GitHub, context} = require('@actions/github');
 const fs = require('fs');
@@ -150,13 +150,14 @@ async function run() {
     });
     core.debug(`Created new reference [${tagRef.data.ref}] at [${tagRef.data.url}]`);
 
+    const parsedVersion = semver.parse(version);
     const release = await git.repos.createRelease({
       ...context.repo,
       name: tagName,
       body: `${tagMessage}`,
       tag_name: tagName,
       draft: false,
-      prerelease: isPrerelease(version.replace(/^v/, '')) || false,
+      prerelease: parsedVersion && (parsedVersion.major === 0 || parsedVersion.prerelease.length),
     });
     core.debug(`Created new release [${release.data.url}]`);
 
