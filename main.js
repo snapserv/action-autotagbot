@@ -156,7 +156,7 @@ async function run() {
       body: `${tagMessage}`,
       tag_name: tagName,
       draft: false,
-      prerelease: isPrerelease(version) || false,
+      prerelease: isPrerelease(version.replace(/^v/, '')) || false,
     });
     core.debug(`Created new release [${release.data.url}]`);
 
