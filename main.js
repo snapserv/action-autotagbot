@@ -93,7 +93,7 @@ async function run() {
 
     const version = matches.groups.version;
     core.setOutput('version', version);
-    core.debug(`Extracted version from source file: ${version}`);
+    core.info(`Extracted version from source file: ${version}`);
 
     if (version === '0' || version === '0.0' || version === '0.0.0')
       return core.info(`Aborting execution as version [${version}] can not be all zeros`);
@@ -103,12 +103,12 @@ async function run() {
       .replace('{revision}', '(?<revision>[0-9]+)')
       .toLowerCase();
     const tagRegExp = new RegExp(tagPattern);
-    core.debug(`Searching for existing tag with pattern: ${tagRegExp}`);
+    core.info(`Searching for existing tag with pattern: ${tagRegExp}`);
 
     const git = new GitHub(apiToken);
     const tags = await getRepoTags(git, context);
     const matchingTag = await searchMatchingTag(tags, tagRegExp);
-    core.debug(`Search result for tag pattern: ${matchingTag ? matchingTag.name : 'not-found'}`);
+    core.info(`Search result for tag pattern: ${matchingTag ? matchingTag.name : 'not-found'}`);
 
     if (matchingTag && matchingTag.sha === context.sha)
       return core.info(`Aborting execution as tag [${matchingTag.name}] points to current commit [${matchingTag.sha}]`);
@@ -119,7 +119,7 @@ async function run() {
     const tagName = tagFormat
       .replace('{version}', version)
       .replace('{revision}', tagRevision.toString());
-    core.debug(`Determined desired tag name: ${tagName}`);
+    core.info(`Determined desired tag name: ${tagName}`);
 
     if (matchingTag && matchingTag.name === tagName)
       return core.info(`Aborting execution as current tag [${matchingTag.name}] matches desired tag`);
@@ -129,11 +129,12 @@ async function run() {
 
     const changelogFrom = tags.length >= 1 ? tags[0].name : null;
     const changelogTo = context.sha;
-    core.debug(`Generating tag message from [${changelogFrom}] to [${changelogTo}]`);
+    core.info(`Generating tag message from [${changelogFrom}] to [${changelogTo}]`);
 
     const tagMessage = await getTagMessage(git, context, changelogFrom, changelogTo);
-    core.debug(`Generated tag message: ${tagMessage}`);
+    core.info(`Generated tag message: ${tagMessage}`);
 
+    core.info(`Creating new tag [${tagName}] at [${context.sha}]...`)
     const tag = await git.git.createTag({
       ...context.repo,
       tag: tagName,
@@ -141,15 +142,17 @@ async function run() {
       object: context.sha,
       type: 'commit',
     });
-    core.debug(`Created new tag: ${tag.data.sha}`);
+    core.info(`Created new tag [${tag.data.tag}] at [${context.sha}]`);
 
+    core.info(`Creating new reference [${tag.data.tag} => ${tag.data.sha}]...`)
     const tagRef = await git.git.createRef({
       ...context.repo,
       ref: `refs/tags/${tag.data.tag}`,
       sha: tag.data.sha,
     });
-    core.debug(`Created new reference [${tagRef.data.ref}] at [${tagRef.data.url}]`);
+    core.info(`Created new reference [${tagRef.data.ref}] at [${tagRef.data.url}]`);
 
+    core.info(`Creating new release [${tagName}]...`)
     const parsedVersion = semver.parse(version);
     const release = await git.repos.createRelease({
       ...context.repo,
@@ -159,7 +162,7 @@ async function run() {
       draft: false,
       prerelease: parsedVersion && (parsedVersion.major === 0 || parsedVersion.prerelease.length),
     });
-    core.debug(`Created new release [${release.data.url}]`);
+    core.info(`Created new release [${release.data.url}]`);
 
     core.setOutput('tag_name', tagName);
     core.setOutput('tag_revision', tagRevision);
