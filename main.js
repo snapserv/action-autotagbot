@@ -1,3 +1,4 @@
+const isPrerelease = require('semver/functions/prerelease');
 const core = require('@actions/core');
 const {GitHub, context} = require('@actions/github');
 const fs = require('fs');
@@ -149,12 +150,21 @@ async function run() {
     });
     core.debug(`Created new reference [${tagRef.data.ref}] at [${tagRef.data.url}]`);
 
+    const release = await git.repos.createRelease({
+      ...context.repo,
+      name: tagName,
+      body: `${tagMessage}`,
+      tag_name: tagName,
+      draft: false,
+      prerelease: isPrerelease(version) ?? false,
+    });
+    core.debug(`Created new release [${release.data.url}]`);
+
     core.setOutput('tag_name', tagName);
     core.setOutput('tag_revision', tagRevision);
-    if (typeof tag === 'object' && typeof tagRef === 'object') {
-      core.setOutput('tag_sha', tag.data.sha);
-      core.setOutput('tag_uri', tagRef.data.url);
-    }
+    core.setOutput('tag_sha', tag.data.sha);
+    core.setOutput('tag_uri', tagRef.data.url);
+    core.setOutput('release_uri', release.data.url);
 
     core.info(`Created new tag [${tagName}] for commit [${context.sha}]`);
   } catch (e) {

@@ -26,6 +26,8 @@ outputs:
     description: 'The SHA hash of the new tag. Empty if no tag has been created.'
   tag_uri:
     description: 'The URI/URL of the new tag reference. Empty if no tag has been created.'
+  release_uri:
+    description: 'The URI/URL of the new release. Empty if no release has been created.'
 runs:
   using: 'node12'
   main: 'main.js'
